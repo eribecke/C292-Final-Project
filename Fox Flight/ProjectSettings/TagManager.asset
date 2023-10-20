@@ -47,3 +47,9 @@ TagManager:
   - name: Middle
     uniqueID: 966503855
     locked: 0
+  - name: Foreground
+    uniqueID: 2478770163
+    locked: 0
+  - name: front
+    uniqueID: 2053141447
+    locked: 0
