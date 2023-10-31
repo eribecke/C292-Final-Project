@@ -6412,7 +6412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74ca4c18e661e2945a067d7043a86b89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  launchForce: 20
+  launchForce: 15
 --- !u!61 &963317896
 BoxCollider2D:
   m_ObjectHideFlags: 0
