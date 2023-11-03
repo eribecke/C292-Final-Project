@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class player : MonoBehaviour
 {
@@ -13,35 +14,63 @@ public class player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         Jeffery = GetComponent<SpriteRenderer>();
-        rb.AddForce(new Vector3 (1,.3f,0).normalized*launchForce, ForceMode2D.Impulse);
+        rb.AddForce(new Vector3 (1,.1f,0).normalized*launchForce, ForceMode2D.Impulse);
         
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-
+        Vector3 position = Jeffery.transform.position;
         float currentAngle = transform.rotation.eulerAngles.z;
+        Debug.Log("Speed " + rb.velocity.magnitude);
         Debug.Log(currentAngle);
-        if (currentAngle == 0)
+        Debug.Log(position.y);
+        float speed = rb.velocity.magnitude;
+
+        //plane is level
+        if (currentAngle == 0 && speed > 3)
         {
             rb.AddForce(new Vector3(0, 1, 0).normalized * (3 * rb.mass), ForceMode2D.Force);
         }
+
+        //plane is angled upward
         else if (currentAngle <= 90)
         {
-            if (currentAngle < 45)
+            //lift will increase
+            if (currentAngle < 45 && speed > Physics.gravity.y + rb.mass && position.y > -7.4)
             {
-                rb.AddForce(new Vector3(0, 1, 0).normalized * ((currentAngle / 5 + 3) * rb.mass), ForceMode2D.Force);
+                rb.AddForce(new Vector3(0, 1, 0).normalized * ((currentAngle/ 5 + 10) * rb.mass), ForceMode2D.Force);
+            }
+            //lift will decrease 
+            else if (speed > Physics.gravity.y + rb.mass && position.y > -7.4)
+            {
+                rb.AddForce(new Vector3(0, 1, 0).normalized * (Mathf.Abs(currentAngle/5 -18) * rb.mass), ForceMode2D.Force);
             }
             else
             {
-                rb.AddForce(new Vector3(0, 1, 0).normalized * (Mathf.Abs(currentAngle/5-18) * rb.mass), ForceMode2D.Force);
+                rb.velocity = new Vector2(rb.velocity.x, 0);
             }
         }
+
+        //plane is angled downward
+        //lift will decrease to 0 at 320, force behind will increase and add to speed
         else
         {
-            rb.AddForce(new Vector3(0, 1, 0).normalized * (1 * rb.mass), ForceMode2D.Force);
-            rb.AddForce(new Vector3(0, -1, 0).normalized * (5 * rb.mass), ForceMode2D.Force);
+            if (speed > 5 && position.y > -7)
+            {
+                rb.AddForce(new Vector3(1, 0, 0).normalized * (Mathf.Abs(currentAngle / 20 - 25) * rb.mass), ForceMode2D.Force);
+                rb.AddForce(new Vector3(0, -1, 0).normalized * (Mathf.Abs(currentAngle / 20 - 20) * rb.mass), ForceMode2D.Force);
+                if (currentAngle > 320)
+                {
+                    rb.AddForce(new Vector3(0, 1, 0).normalized * (Mathf.Abs(currentAngle / 20 - 16) * rb.mass), ForceMode2D.Force);
+                }
+                else
+                {
+                    rb.AddForce(new Vector3(0, 1, 0).normalized, ForceMode2D.Force);
+
+                }
+            }
         }
 
         if (Input.GetKey(KeyCode.RightArrow))
@@ -68,12 +97,14 @@ public class player : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
+            //bounds for rotation
             if (currentAngle <= 90 || currentAngle >= 270)
             {
                 transform.Rotate(Vector3.forward * rotateSpeed * Time.deltaTime);
             }
             else
             {
+                //if plane over-rotates reset angle so rotation can ensue 
                 if (currentAngle > 90 && currentAngle < 95)
                 {
                     transform.rotation = Quaternion.Euler(0f, 0f, 90f);
