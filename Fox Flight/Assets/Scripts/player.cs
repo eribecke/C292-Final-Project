@@ -44,7 +44,7 @@ public class player : MonoBehaviour
             {
                 //rb.AddForce(new Vector3(0, -1, 0).normalized * ((currentAngle / 5 + speed / 12) * rb.mass), ForceMode2D.Force);
                 //rb.AddForce(new Vector3(0, 1, 0).normalized * ((currentAngle / 5 + speed/2) * rb.mass), ForceMode2D.Force);
-                rb.AddRelativeForce(Vector2.up * (1.293f * Mathf.Pow(rb.velocity.magnitude, 2) / 2) * (0.05f));
+                rb.AddRelativeForce(Vector2.up * (1.293f * Mathf.Pow(rb.velocity.magnitude, 2) / 2) * (0.08f));
             }
             //lift will decrease 
             else if (speed > Physics.gravity.y + rb.mass && position.y > -7.4)
@@ -63,7 +63,7 @@ public class player : MonoBehaviour
         {
             if (speed > 5 && position.y > -7)
             {
-                //rb.AddForce(new Vector3(1, 0, 0).normalized * (Mathf.Abs(currentAngle / 20 - speed * (3 / 5)) * rb.mass), ForceMode2D.Force);
+                rb.AddForce(new Vector3(1, 0, 0).normalized * (Mathf.Abs(currentAngle / 20 - speed * (4 / 5)) * rb.mass), ForceMode2D.Force);
                 //rb.AddForce(new Vector3(0, -1, 0).normalized * (Mathf.Abs(currentAngle / 20 - speed * (1 / 3)) * rb.mass), ForceMode2D.Force);
                 if (currentAngle > 320)
                 {
