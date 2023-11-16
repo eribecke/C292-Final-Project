@@ -10,18 +10,32 @@ public class player : MonoBehaviour
     SpriteRenderer Jeffery;
     [SerializeField] float launchForce;
     [SerializeField] float rotateSpeed;
-    [SerializeField] Canvas Shop;
+    float timer = 2;
     
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        Jeffery = GetComponent<SpriteRenderer>();
-        rb.AddForce(new Vector3(1, .2f, 0).normalized * launchForce, ForceMode2D.Impulse);
-        Shop.enabled = false;
+        
+       rb = GetComponent<Rigidbody2D>();
+       Jeffery = GetComponent<SpriteRenderer>();
+       
     }
 
+
+
     // Update is called once per frame
+    private void Update()
+    {
+     
+        if(timer>0) {timer -= Time.deltaTime; }
+        
+        
+        if (timer < 0)
+        {
+            rb.AddForce(new Vector3(1, 0, 0).normalized * launchForce, ForceMode2D.Impulse);
+            timer = 0;
+        }
+    }
     void FixedUpdate()
     {
         Vector3 position = Jeffery.transform.position;
@@ -29,7 +43,8 @@ public class player : MonoBehaviour
         Debug.Log("Y Speed " + rb.velocity.y);
         Debug.Log("X Speed " + rb.velocity.x);
         Debug.Log("Speed " + rb.velocity.magnitude);
-        Debug.Log("Lift" + Vector2.up * (1.293f * Mathf.Pow(rb.velocity.magnitude, 2) / 2) * (0.5f));
+        Debug.Log("Lift" + Vector2.up.normalized * (1.293f * Mathf.Pow(rb.velocity.magnitude, 2) / 2) * (0.5f));
+        Debug.Log("Angle: " + currentAngle);
 
         float speed = rb.velocity.magnitude;
         float airDensity = 1.293f;
@@ -47,13 +62,13 @@ public class player : MonoBehaviour
         else if (currentAngle <= 90)
         {
             //lift will increase
-            if (currentAngle < 45 && speed > Physics.gravity.y + rb.mass && position.y > -7.4)
+            if (currentAngle < 45 && speed > Physics.gravity.y + rb.mass && position.y > -7.4  && rb.velocity.y < 25)
             {
                 //rb.AddForce(new Vector3(0, -1, 0).normalized * ((currentAngle / 5 + speed / 12) * rb.mass), ForceMode2D.Force);
                 //rb.AddForce(new Vector3(0, 1, 0).normalized * ((currentAngle / 5 + speed/2) * rb.mass), ForceMode2D.Force);
 
                 //lift formula
-                rb.AddRelativeForce(Vector2.up.normalized * (airDensity * Mathf.Pow(rb.velocity.magnitude, 2) / 2) * (0.034f));
+                rb.AddRelativeForce(Vector2.up.normalized * (airDensity * Mathf.Pow(rb.velocity.magnitude, 2) / 2) * .04f);
             }
             //lift will decrease 
             else if (speed > Physics.gravity.y + rb.mass && position.y > -7.4)
@@ -125,6 +140,11 @@ public class player : MonoBehaviour
                 if (currentAngle < 270 && currentAngle > 265)
                 {
                     transform.rotation = Quaternion.Euler(0f, 0f, 270f);
+                }
+                //adding lift if player lifts up nose of plane
+                if(currentAngle > 315)
+                {
+                    rb.AddRelativeForce(Vector2.up.normalized * (airDensity * Mathf.Pow(rb.velocity.magnitude, 2) / 2) * .04f);
                 }
             }
 

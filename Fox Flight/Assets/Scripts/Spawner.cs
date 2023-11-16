@@ -6,6 +6,7 @@ public class Spawner : MonoBehaviour
 {
     [SerializeField] float spawnRate = 1f;
     [SerializeField] GameObject enemyPrefab;
+    float timer = 3;
  
 
     float yMin;
@@ -22,13 +23,20 @@ public class Spawner : MonoBehaviour
     }
     private void Start()
     {
-        InvokeRepeating("SpawnEnemy", 0, spawnRate);
+       
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (timer > 0) { timer -= Time.deltaTime; }
 
+
+        if (timer < 0)
+        {
+            InvokeRepeating("SpawnEnemy", 0, spawnRate);
+            timer = 0;
+        }
     }
 
     void SpawnEnemy()
