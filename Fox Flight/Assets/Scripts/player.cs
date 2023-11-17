@@ -68,11 +68,7 @@ public class player : MonoBehaviour
     {
         Vector3 position = Jeffery.transform.position;
         float currentAngle = transform.rotation.eulerAngles.z;
-        Debug.Log("Y Speed " + rb.velocity.y);
-        Debug.Log("X Speed " + rb.velocity.x);
-        Debug.Log("Speed " + rb.velocity.magnitude);
-        Debug.Log("Lift" + Vector2.up.normalized * (1.293f * Mathf.Pow(rb.velocity.magnitude, 2) / 2) * (0.5f));
-        Debug.Log("Angle: " + currentAngle);
+        
 
         float speed = rb.velocity.magnitude;
         float airDensity = 1.293f;
