@@ -2,14 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 using UnityEngine.XR;
 
 public class player : MonoBehaviour
 {
     Rigidbody2D rb;
     SpriteRenderer Jeffery;
+    [SerializeField] GameObject flames;
     [SerializeField] float launchForce;
     [SerializeField] float rotateSpeed;
+    [SerializeField] UnityEngine.UI.Image fuelBar;
+    [SerializeField] float fuelAmount;
+    [SerializeField] GameObject fuel;
     float timer = 2;
     
     // Start is called before the first frame update
@@ -35,6 +41,28 @@ public class player : MonoBehaviour
             rb.AddForce(new Vector3(1, 0, 0).normalized * launchForce, ForceMode2D.Impulse);
             timer = 0;
         }
+
+        if(Jeffery.sprite.name == "boosters")
+        {
+            fuel.SetActive(true);
+            if (Input.GetKey(KeyCode.Space))
+            {
+                if (fuelAmount > 0)
+                {
+                    flames.SetActive(true);
+                    fuelAmount -= Time.deltaTime;
+                    fuelBar.fillAmount = fuelAmount/5;
+                    rb.AddRelativeForce(new Vector3(1, 0, 0).normalized * 5, ForceMode2D.Impulse);
+                }
+                
+
+            }
+            else
+            {
+                flames.SetActive(false);
+            }
+        }
+       
     }
     void FixedUpdate()
     {
