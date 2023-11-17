@@ -10,8 +10,7 @@ using UnityEngine.UI;
 public class Shop : MonoBehaviour
 {
     [SerializeField] Button nextRun;
-    [SerializeField] Button buy;
-    [SerializeField] TextMeshProUGUI buyTxt;
+ 
    
     // Start is called before the first frame update
     void Start()
@@ -32,11 +31,5 @@ public class Shop : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    void buyClicked()
-    {
-  
-    
-        
-    }
 
 }
